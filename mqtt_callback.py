@@ -4,6 +4,7 @@ import re
 ELECTRICITY_TOPIC = "tele/+/SENSOR"
 GAS_TOPIC = "gas-meter/meter/update"
 WEATHER_TOPIC = "weather/+/SENSOR"
+SYSINFO_TOPIC = "sysinfo/+/SENSOR"
 
 
 class MqttCallback:
@@ -33,4 +34,11 @@ class MqttCallback:
             payload = json.loads(payload)
             payload = self.transformer.add_mandatory_fields(payload, identifier)
             self.influxdb.push_all([payload], self.args.influxdb_weather_bucket)
+            return
+        probe_id = re.search(r"sysinfo/probe_(.+?)/SENSOR", topic, re.IGNORECASE)
+        if probe_id:
+            identifier = probe_id.group(1)
+            payload = json.loads(payload)
+            payload = self.transformer.add_mandatory_fields(payload, identifier)
+            self.influxdb.push_all([payload], self.args.influxdb_sysinfo_bucket)
             return
