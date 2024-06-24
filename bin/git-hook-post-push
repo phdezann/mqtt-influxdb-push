@@ -4,7 +4,7 @@
 set -e -u
 
 host="mosquito"
-service_name="linky"
+service_name="mqtt-influxdb-push"
 
 echo "Restarting service..."
 ssh "${host}" "sudo systemctl restart ${service_name}"
