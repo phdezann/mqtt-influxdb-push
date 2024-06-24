@@ -1,0 +1,3 @@
+[submodule "mqtt"]
+	path = mqtt
+	url = git@bitbucket.org:phdezann/mqtt-utils.git
