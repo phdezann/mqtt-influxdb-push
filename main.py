@@ -51,12 +51,12 @@ def main():
     monitor.register_client(buffer)
     buffer.start_reading()
 
-    status = monitor.wait_for_termination()
-    monitor.close_all_clients(status)
+    termination_status = monitor.wait_for_termination()
+    monitor.close_all_clients(termination_status)
 
-    if status == TerminationStatus.NORMAL_TERMINATION:
+    if termination_status == TerminationStatus.NORMAL_TERMINATION:
         sys.exit(0)
-    elif status == TerminationStatus.ABNORMAL_TERMINATION:
+    elif termination_status == TerminationStatus.ABNORMAL_TERMINATION:
         sys.exit(1)
 
 
