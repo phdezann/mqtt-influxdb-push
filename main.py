@@ -8,7 +8,7 @@ from buffer import Buffer
 from influxdb import Influxdb
 from mqtt.mqtt_monitor import MqttClientMonitor, TerminationStatus
 from mqtt.mqtt_sub import MqttSub
-from mqtt_callback import MqttCallback, WEATHER_TOPIC, ELECTRICITY_TOPIC, GAS_TOPIC, SYSINFO_TOPIC
+from mqtt_callback import MqttCallback, WEATHER_TOPIC, ELECTRICITY_TOPIC, GAS_TOPIC, SYSINFO_TOPIC, SANDBOX_TOPIC
 from ssh_tunnel import SSHTunnel
 
 
@@ -20,6 +20,7 @@ def main():
     parser.add_argument("--influxdb-energy-bucket", default="linky")
     parser.add_argument("--influxdb-weather-bucket", default="weather")
     parser.add_argument("--influxdb-sysinfo-bucket", default="sysinfo")
+    parser.add_argument("--influxdb-sandbox-bucket", default="sandbox")
     parser.add_argument("--influxdb-token")
     parser.add_argument("--buffer-size", type=int, default=10)
     parser.add_argument("--meter-owner")
@@ -39,10 +40,12 @@ def main():
     pub_electricity = MqttSub(monitor, args.mqtt_hostname, args.mqtt_port, ELECTRICITY_TOPIC, 2, mqtt_callback.on_message)
     pub_gas = MqttSub(monitor, args.mqtt_hostname, args.mqtt_port, GAS_TOPIC, 2, mqtt_callback.on_message)
     pub_sysinfo = MqttSub(monitor, args.mqtt_hostname, args.mqtt_port, SYSINFO_TOPIC, 2, mqtt_callback.on_message)
+    pub_sandbox = MqttSub(monitor, args.mqtt_hostname, args.mqtt_port, SANDBOX_TOPIC, 2, mqtt_callback.on_message)
     pub_weather.start()
     pub_electricity.start()
     pub_gas.start()
     pub_sysinfo.start()
+    pub_sandbox.start()
     logging.info("Mqtt publishers are now ready")
 
     monitor.register_client(buffer)
