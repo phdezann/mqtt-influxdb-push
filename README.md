@@ -1,0 +1,1 @@
+This project reads probe sensor data from mqtt and pushes it to influxdb.
